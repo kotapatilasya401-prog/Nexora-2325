@@ -1,0 +1,1096 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexora | Student Verification</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+:root {
+  --primary:#6858d8;
+  --primary-light:#eeeaff;
+  --bg:#f6f7fb;
+  --white:#ffffff;
+  --text:#25263b;
+  --muted:#85879b;
+  --border:#ececf2;
+  --green:#15966a;
+  --red:#dc555d;
+  --orange:#d98a27;
+}
+
+* { box-sizing:border-box; margin:0; padding:0; }
+
+body {
+  font-family:Inter,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+
+button,input { font:inherit; }
+button { cursor:pointer; border:0; }
+
+.auth-page {
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:linear-gradient(135deg,#f1efff,#f8f9ff,#e9f1ff);
+}
+
+.auth-card {
+  background:white;
+  width:100%;
+  max-width:410px;
+  padding:38px;
+  border-radius:20px;
+  box-shadow:0 15px 50px #34306c12;
+}
+
+.brand {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-weight:800;
+  font-size:24px;
+  color:var(--primary);
+}
+
+.brand-icon {
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  border-radius:13px;
+  color:white;
+  background:linear-gradient(135deg,#7969e8,#5544bd);
+}
+
+.auth-card h2 { margin-top:30px; font-size:23px; }
+.auth-card p { color:var(--muted); font-size:13px; margin:9px 0 25px; }
+
+.field { margin-bottom:17px; }
+.field label {
+  display:block;
+  font-size:13px;
+  font-weight:600;
+  margin-bottom:8px;
+}
+
+.field input {
+  width:100%;
+  padding:13px;
+  border:1px solid var(--border);
+  border-radius:9px;
+  outline:none;
+  background:#fff;
+}
+
+.field input:focus { border-color:var(--primary); }
+
+.primary-btn {
+  width:100%;
+  padding:13px;
+  color:white;
+  background:var(--primary);
+  border-radius:9px;
+  font-weight:700;
+  margin-top:8px;
+}
+
+.primary-btn:hover { background:#5546c1; }
+
+.auth-switch {
+  text-align:center;
+  margin-top:22px;
+  font-size:13px;
+  color:var(--muted);
+}
+
+.auth-switch a { color:var(--primary); font-weight:700; cursor:pointer; }
+
+.error {
+  color:var(--red);
+  font-size:12px;
+  margin-top:12px;
+}
+
+.app { display:none; min-height:100vh; }
+
+.sidebar {
+  position:fixed;
+  left:0; top:0; bottom:0;
+  width:245px;
+  background:white;
+  border-right:1px solid var(--border);
+  padding:25px 17px;
+  z-index:5;
+}
+
+.sidebar .brand { padding:0 9px 35px; }
+
+.nav-label {
+  color:#a2a3b2;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:1.2px;
+  padding:13px 12px;
+}
+
+.nav-item {
+  width:100%;
+  display:flex;
+  align-items:center;
+  gap:13px;
+  padding:13px;
+  margin-bottom:5px;
+  border-radius:9px;
+  background:transparent;
+  color:#707287;
+  text-align:left;
+  font-size:13px;
+  font-weight:600;
+}
+
+.nav-item i { width:18px; text-align:center; }
+
+.nav-item:hover,.nav-item.active {
+  background:var(--primary-light);
+  color:var(--primary);
+}
+
+.sidebar-bottom {
+  position:absolute;
+  bottom:22px;
+  left:17px;
+  right:17px;
+}
+
+.profile {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:12px 7px;
+  border-top:1px solid var(--border);
+  font-size:12px;
+}
+
+.avatar {
+  width:36px;height:36px;
+  border-radius:50%;
+  background:#eeeaff;
+  color:var(--primary);
+  display:grid;
+  place-items:center;
+  font-weight:800;
+}
+
+.main {
+  margin-left:245px;
+  padding:30px 35px;
+}
+
+.topbar {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:30px;
+}
+
+.topbar h1 { font-size:23px; }
+.topbar p { color:var(--muted); font-size:12px; margin-top:7px; }
+
+.top-actions { display:flex; gap:10px; align-items:center; }
+
+.icon-btn {
+  width:39px;height:39px;
+  border:1px solid var(--border);
+  background:white;
+  color:#77798c;
+  border-radius:10px;
+}
+
+.content-section { display:none; }
+.content-section.active { display:block; }
+
+.stats {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:17px;
+  margin-bottom:24px;
+}
+
+.stat-card {
+  background:white;
+  padding:21px;
+  border:1px solid var(--border);
+  border-radius:13px;
+}
+
+.stat-top {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  color:var(--muted);
+  font-size:12px;
+}
+
+.stat-icon {
+  width:37px;height:37px;
+  display:grid;place-items:center;
+  background:var(--primary-light);
+  color:var(--primary);
+  border-radius:10px;
+}
+
+.stat-number {
+  font-size:27px;
+  font-weight:800;
+  margin-top:17px;
+}
+
+.stat-note { font-size:11px; color:var(--muted); margin-top:5px; }
+
+.panel {
+  background:white;
+  border:1px solid var(--border);
+  border-radius:13px;
+  padding:22px;
+  margin-bottom:22px;
+}
+
+.panel-heading {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:20px;
+}
+
+.panel-heading h3 { font-size:15px; }
+.panel-heading p { font-size:11px; color:var(--muted); margin-top:5px; }
+
+.btn {
+  padding:10px 14px;
+  border-radius:8px;
+  font-size:12px;
+  font-weight:700;
+}
+
+.btn-primary { background:var(--primary); color:white; }
+.btn-light { background:var(--primary-light); color:var(--primary); }
+.btn-danger { background:#fff0f0; color:var(--red); }
+.btn-success { background:#e8f8f1; color:var(--green); }
+
+.search-row {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:18px;
+  flex-wrap:wrap;
+}
+
+.search-box {
+  flex:1;
+  min-width:180px;
+  position:relative;
+}
+
+.search-box i {
+  position:absolute;
+  left:13px;
+  top:13px;
+  color:#a0a1af;
+}
+
+.search-box input {
+  width:100%;
+  padding:12px 12px 12px 38px;
+  border:1px solid var(--border);
+  border-radius:8px;
+  outline:none;
+}
+
+.tabs { display:flex; gap:7px; flex-wrap:wrap; }
+
+.tab {
+  padding:9px 12px;
+  border-radius:8px;
+  color:#77798b;
+  background:#f7f7fa;
+  font-size:11px;
+  font-weight:700;
+}
+
+.tab.active { background:var(--primary-light); color:var(--primary); }
+
+.table-wrap { overflow-x:auto; }
+
+table { width:100%; border-collapse:collapse; min-width:850px; }
+
+th {
+  color:#9697a6;
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+  text-align:left;
+  padding:13px 11px;
+  background:#fafafd;
+}
+
+td {
+  padding:15px 11px;
+  border-bottom:1px solid #f0f0f4;
+  font-size:11px;
+}
+
+.student-name { font-weight:700; }
+.sub-text { display:block; color:var(--muted); margin-top:4px; }
+
+.status,.risk-badge {
+  display:inline-block;
+  border-radius:20px;
+  padding:6px 9px;
+  font-size:10px;
+  font-weight:700;
+}
+
+.status.approved,.status.verified { background:#e7f7ef;color:var(--green); }
+.status.rejected { background:#fff0f0;color:var(--red); }
+.status.pending,.status.flagged { background:#fff5e6;color:var(--orange); }
+
+.risk-low { color:var(--green); }
+.risk-medium { color:var(--orange); }
+.risk-high { color:var(--red); }
+
+.form-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:17px;
+}
+
+.form-grid .field { margin-bottom:4px; }
+.form-grid input { padding:13px; }
+
+.form-actions {
+  display:flex;
+  justify-content:flex-end;
+  gap:10px;
+  margin-top:22px;
+}
+
+.result-box {
+  padding:15px;
+  border-radius:10px;
+  background:#f8f7ff;
+  margin-top:17px;
+  display:none;
+}
+
+.result-box h4 { font-size:13px; margin-bottom:9px; }
+.result-box p { font-size:12px; margin-top:6px; color:#66677c; }
+
+.risk-number { font-size:26px; font-weight:800; margin:7px 0; }
+
+.graph-area {
+  background:#fafaff;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:22px;
+  min-height:200px;
+}
+
+.graph-node {
+  display:inline-block;
+  padding:12px 17px;
+  background:white;
+  border:2px solid #d9d2ff;
+  border-radius:12px;
+  margin:8px;
+  font-size:12px;
+  box-shadow:0 3px 12px #00000008;
+}
+
+.graph-node.flag { border-color:#f0aaaa; }
+
+.empty {
+  text-align:center;
+  padding:35px;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.toast {
+  position:fixed;
+  right:22px;
+  bottom:22px;
+  background:#25263b;
+  color:white;
+  padding:14px 20px;
+  border-radius:9px;
+  font-size:12px;
+  display:none;
+  z-index:20;
+}
+
+@media(max-width:1000px) {
+  .stats { grid-template-columns:repeat(2,1fr); }
+}
+
+@media(max-width:700px) {
+  .sidebar { width:65px; padding:20px 8px; }
+  .sidebar .brand { padding:0 4px 30px; }
+  .sidebar .brand span:last-child,
+  .nav-item span,.nav-label,.profile div:not(.avatar) { display:none; }
+  .nav-item { justify-content:center; padding:14px 5px; }
+  .main { margin-left:65px; padding:22px 14px; }
+  .stats { grid-template-columns:1fr 1fr; gap:9px; }
+  .stat-card { padding:14px; }
+  .stat-number { font-size:22px; }
+  .form-grid { grid-template-columns:1fr; }
+  .topbar h1 { font-size:18px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div class="auth-page" id="loginPage">
+  <div class="auth-card">
+    <div class="brand">
+      <span class="brand-icon"><i class="fa-solid fa-shield-halved"></i></span>
+      <span>Nexora</span>
+    </div>
+    <h2>Welcome back</h2>
+    <p>Sign in to your student verification workspace.</p>
+
+    <form id="loginForm">
+      <div class="field">
+        <label>Username</label>
+        <input id="loginUser" required placeholder="Enter username">
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input id="loginPass" type="password" required placeholder="Enter password">
+      </div>
+      <button class="primary-btn">Sign in</button>
+      <div class="error" id="loginError"></div>
+    </form>
+
+    <div class="auth-switch">
+      Don't have an account?
+      <a onclick="showRegister()">Create account</a>
+    </div>
+    <p style="margin-top:18px;font-size:10px">
+      Demonstration interface. Authentication must be connected to the secure backend before deployment.
+    </p>
+  </div>
+</div>
+
+<!-- REGISTER OFFICER -->
+<div class="auth-page" id="registerPage" style="display:none">
+  <div class="auth-card">
+    <div class="brand">
+      <span class="brand-icon"><i class="fa-solid fa-shield-halved"></i></span>
+      <span>Nexora</span>
+    </div>
+    <h2>Create your account</h2>
+    <p>Create an officer account. Admin privileges must be assigned by an authorised administrator.</p>
+
+    <form id="registerForm">
+      <div class="field">
+        <label>Username</label>
+        <input id="newUser" required minlength="3" placeholder="Create username">
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input id="newPass" type="password" required minlength="8" placeholder="Create password (8+ characters)">
+      </div>
+      <button class="primary-btn">Create account</button>
+      <div class="error" id="registerError"></div>
+    </form>
+    <div class="auth-switch">
+      Already have an account?
+      <a onclick="showLogin()">Sign in</a>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div class="app" id="app">
+
+<aside class="sidebar">
+  <div class="brand">
+    <span class="brand-icon"><i class="fa-solid fa-shield-halved"></i></span>
+    <span>Nexora</span>
+  </div>
+
+  <div class="nav-label">WORKSPACE</div>
+  <button class="nav-item active" onclick="showSection('dashboard',this)">
+    <i class="fa-solid fa-house"></i><span>Dashboard</span>
+  </button>
+  <button class="nav-item" onclick="showSection('students',this)">
+    <i class="fa-solid fa-users"></i><span>Student Records</span>
+  </button>
+  <button class="nav-item" onclick="showSection('addStudent',this)">
+    <i class="fa-solid fa-user-plus"></i><span>Register Student</span>
+  </button>
+
+  <div class="nav-label">INTELLIGENCE</div>
+  <button class="nav-item" onclick="showSection('flagged',this)">
+    <i class="fa-solid fa-triangle-exclamation"></i><span>Flagged Reviews</span>
+  </button>
+  <button class="nav-item" onclick="showSection('relationships',this)">
+    <i class="fa-solid fa-diagram-project"></i><span>Relationships</span>
+  </button>
+
+  <div class="sidebar-bottom">
+    <button class="nav-item" onclick="logout()">
+      <i class="fa-solid fa-right-from-bracket"></i><span>Sign out</span>
+    </button>
+    <div class="profile">
+      <div class="avatar">N</div>
+      <div>
+        <b id="profileName">Officer</b>
+        <div style="color:#999;font-size:10px;margin-top:4px">Officer account</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<main class="main">
+  <header class="topbar">
+    <div>
+      <h1 id="pageTitle">Dashboard</h1>
+      <p id="pageSubtitle">Monitor student verification and risk intelligence.</p>
+    </div>
+    <div class="top-actions">
+      <button class="icon-btn" title="Notifications"><i class="fa-regular fa-bell"></i></button>
+      <button class="icon-btn" title="Profile"><i class="fa-regular fa-user"></i></button>
+    </div>
+  </header>
+
+  <!-- DASHBOARD -->
+  <section class="content-section active" id="dashboard">
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-top">Total Students <span class="stat-icon"><i class="fa-solid fa-users"></i></span></div>
+        <div class="stat-number" id="totalCount">0</div>
+        <div class="stat-note">Registered records</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-top">Flagged Records <span class="stat-icon" style="background:#fff3e5;color:#d98a27"><i class="fa-solid fa-flag"></i></span></div>
+        <div class="stat-number" id="flagCount">0</div>
+        <div class="stat-note">Require administrator review</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-top">Verified <span class="stat-icon" style="background:#e7f7ef;color:#15966a"><i class="fa-solid fa-circle-check"></i></span></div>
+        <div class="stat-number" id="verifiedCount">0</div>
+        <div class="stat-note">Passed automated checks</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-top">Approved <span class="stat-icon" style="background:#e7f7ef;color:#15966a"><i class="fa-solid fa-user-check"></i></span></div>
+        <div class="stat-number" id="approvedCount">0</div>
+        <div class="stat-note">Approved records</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-heading">
+        <div><h3>Recent Student Records</h3><p>Latest student verification activity</p></div>
+        <button class="btn btn-light" onclick="showSection('students')">View all <i class="fa-solid fa-arrow-right"></i></button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Student</th><th>APAAR ID</th><th>Institution</th><th>Risk</th><th>Status</th>
+          </tr></thead>
+          <tbody id="recentTable"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- STUDENTS -->
+  <section class="content-section" id="students">
+    <div class="panel">
+      <div class="panel-heading">
+        <div><h3>Student Records</h3><p>Manage and review registered student information.</p></div>
+        <button class="btn btn-primary" onclick="showSection('addStudent')"><i class="fa-solid fa-plus"></i> Register Student</button>
+      </div>
+
+      <div class="search-row">
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input id="studentSearch" placeholder="Search name, APAAR ID, phone or institution..." oninput="renderStudents()">
+        </div>
+      </div>
+
+      <div class="tabs" id="studentTabs">
+        <button class="tab active" onclick="setFilter('all',this)">All Students</button>
+        <button class="tab" onclick="setFilter('flagged',this)">Flagged</button>
+        <button class="tab" onclick="setFilter('verified',this)">Verified</button>
+        <button class="tab" onclick="setFilter('approved',this)">Approved</button>
+        <button class="tab" onclick="setFilter('rejected',this)">Rejected</button>
+      </div>
+
+      <div class="table-wrap" style="margin-top:17px">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th><th>Phone</th><th>APAAR ID</th><th>Email</th>
+              <th>Institution</th><th>Risk</th><th>Status</th><th>Reason</th><th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="studentsTable"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ADD STUDENT -->
+  <section class="content-section" id="addStudent">
+    <div class="panel">
+      <div class="panel-heading">
+        <div><h3>Register New Student</h3><p>Enter student information for verification.</p></div>
+        <span class="status pending">Identity review</span>
+      </div>
+
+      <form id="studentForm">
+        <div class="form-grid">
+          <div class="field">
+            <label>Student Name *</label>
+            <input id="sName" required placeholder="Enter full name">
+          </div>
+          <div class="field">
+            <label>APAAR ID *</label>
+            <input id="sApaar" required placeholder="Enter APAAR ID">
+          </div>
+          <div class="field">
+            <label>Phone Number *</label>
+            <input id="sPhone" required inputmode="numeric" placeholder="10-digit phone number">
+          </div>
+          <div class="field">
+            <label>Email Address *</label>
+            <input id="sEmail" type="email" required placeholder="Enter email address">
+          </div>
+          <div class="field" style="grid-column:1/-1">
+            <label>Institution *</label>
+            <input id="sInstitution" required placeholder="Enter college / institution name">
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="reset" class="btn btn-light">Clear</button>
+          <button class="btn btn-primary"><i class="fa-solid fa-shield-halved"></i> Verify & Register</button>
+        </div>
+      </form>
+
+      <div class="result-box" id="verificationResult">
+        <h4>Verification Result</h4>
+        <div class="risk-number" id="resultScore">0/100</div>
+        <div id="resultLevel"></div>
+        <div id="resultReasons"></div>
+        <p id="resultStatus"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FLAGGED -->
+  <section class="content-section" id="flagged">
+    <div class="panel">
+      <div class="panel-heading">
+        <div><h3>Flagged Reviews</h3><p>Records with possible inconsistencies that need human review.</p></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Name</th><th>APAAR ID</th><th>Risk</th><th>Reason</th><th>Action</th></tr></thead>
+          <tbody id="flaggedTable"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- RELATIONSHIPS -->
+  <section class="content-section" id="relationships">
+    <div class="panel">
+      <div class="panel-heading">
+        <div><h3>Student Relationship Detection</h3><p>Explore shared identifiers across registered records.</p></div>
+      </div>
+      <div class="graph-area" id="graphArea"></div>
+      <p style="font-size:11px;color:#888;margin-top:15px">
+        Shared contact details are signals for review, not proof of fraud or identity misuse.
+      </p>
+    </div>
+  </section>
+
+</main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let students = [];
+let currentFilter = "all";
+let currentOfficer = "";
+
+const $ = id => document.getElementById(id);
+
+function notify(message) {
+  $("toast").textContent = message;
+  $("toast").style.display = "block";
+  setTimeout(() => $("toast").style.display = "none", 3000);
+}
+
+function showRegister() {
+  $("loginPage").style.display = "none";
+  $("registerPage").style.display = "flex";
+}
+
+function showLogin() {
+  $("registerPage").style.display = "none";
+  $("loginPage").style.display = "flex";
+}
+
+function showApp() {
+  $("loginPage").style.display = "none";
+  $("registerPage").style.display = "none";
+  $("app").style.display = "block";
+  $("profileName").textContent = currentOfficer;
+  loadStudents();
+  refreshDashboard();
+}
+
+function logout() {
+  currentOfficer = "";
+  $("app").style.display = "none";
+  $("loginPage").style.display = "flex";
+  $("loginPass").value = "";
+}
+
+function showSection(id, button) {
+  document.querySelectorAll(".content-section").forEach(s => s.classList.remove("active"));
+  $(id).classList.add("active");
+
+  document.querySelectorAll(".nav-item").forEach(b => b.classList.remove("active"));
+  if(button) button.classList.add("active");
+
+  const titles = {
+    dashboard:["Dashboard","Monitor student verification and risk intelligence."],
+    students:["Student Records","Manage all registered student records."],
+    addStudent:["Register Student","Enter details and run verification checks."],
+    flagged:["Flagged Reviews","Review records with possible risk indicators."],
+    relationships:["Relationships","Explore connections between student records."]
+  };
+
+  $("pageTitle").textContent = titles[id][0];
+  $("pageSubtitle").textContent = titles[id][1];
+
+  if(id === "students") renderStudents();
+  if(id === "flagged") renderFlagged();
+  if(id === "relationships") renderGraph();
+  if(id === "dashboard") refreshDashboard();
+}
+
+function getAccounts() {
+  return JSON.parse(localStorage.getItem("nexora_demo_accounts") || "[]");
+}
+
+$("registerForm").addEventListener("submit", e => {
+  e.preventDefault();
+
+  const username = $("newUser").value.trim();
+  const password = $("newPass").value;
+
+  const accounts = getAccounts();
+
+  if(accounts.some(a => a.username.toLowerCase() === username.toLowerCase())) {
+    $("registerError").textContent = "Username already exists.";
+    return;
+  }
+
+  accounts.push({username,password});
+  localStorage.setItem("nexora_demo_accounts",JSON.stringify(accounts));
+
+  $("registerError").textContent = "";
+  notify("Demo officer account created.");
+  showLogin();
+});
+
+$("loginForm").addEventListener("submit", e => {
+  e.preventDefault();
+
+  const username = $("loginUser").value.trim();
+  const password = $("loginPass").value;
+
+  const account = getAccounts().find(a =>
+    a.username === username && a.password === password
+  );
+
+  if(!account) {
+    $("loginError").textContent = "Invalid username or password. Register a demo account first.";
+    return;
+  }
+
+  currentOfficer = username;
+  $("loginError").textContent = "";
+  showApp();
+});
+
+function loadStudents() {
+  students = JSON.parse(localStorage.getItem("nexora_demo_students") || "[]");
+}
+
+function saveStudents() {
+  localStorage.setItem("nexora_demo_students",JSON.stringify(students));
+}
+
+function calculateRisk(data) {
+  let score = 0;
+  let reasons = [];
+
+  if(!/^\d{10}$/.test(data.phone)) {
+    score += 25;
+    reasons.push("Phone number must contain exactly 10 digits");
+  }
+
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
+    score += 20;
+    reasons.push("Invalid email format");
+  }
+
+  if(data.apaar.length < 1) {
+    score += 30;
+    reasons.push("APAAR ID is missing");
+  }
+
+  if(students.some(s => s.apaar.toLowerCase() === data.apaar.toLowerCase())) {
+    score += 70;
+    reasons.push("Duplicate APAAR ID found");
+  }
+
+  if(students.some(s => s.phone === data.phone && data.phone)) {
+    score += 20;
+    reasons.push("Phone number is already linked to another record");
+  }
+
+  if(students.some(s => s.email.toLowerCase() === data.email.toLowerCase())) {
+    score += 20;
+    reasons.push("Email is already linked to another record");
+  }
+
+  return {
+    score:Math.min(score,100),
+    reasons
+  };
+}
+
+function riskClass(score) {
+  if(score >= 50) return "risk-high";
+  if(score >= 25) return "risk-medium";
+  return "risk-low";
+}
+
+function riskLabel(score) {
+  if(score >= 50) return "High Risk";
+  if(score >= 25) return "Medium Risk";
+  return "Low Risk";
+}
+
+function statusBadge(status) {
+  return `<span class="status ${status.toLowerCase()}">${status}</span>`;
+}
+
+$("studentForm").addEventListener("submit", e => {
+  e.preventDefault();
+
+  const data = {
+    name:$("sName").value.trim(),
+    apaar:$("sApaar").value.trim(),
+    phone:$("sPhone").value.trim(),
+    email:$("sEmail").value.trim(),
+    institution:$("sInstitution").value.trim()
+  };
+
+  const risk = calculateRisk(data);
+
+  const record = {
+    id:Date.now(),
+    ...data,
+    risk:risk.score,
+    reasons:risk.reasons,
+    status:risk.score >= 25 ? "Flagged" : "Verified",
+    date:new Date().toISOString()
+  };
+
+  students.unshift(record);
+  saveStudents();
+
+  $("verificationResult").style.display = "block";
+  $("resultScore").textContent = risk.score + "/100";
+  $("resultScore").className = "risk-number " + riskClass(risk.score);
+
+  $("resultLevel").innerHTML =
+    `<span class="risk-badge ${riskClass(risk.score)}">${riskLabel(risk.score)}</span>`;
+
+  $("resultReasons").innerHTML = risk.reasons.length
+    ? risk.reasons.map(r => `<p>• ${escapeHTML(r)}</p>`).join("")
+    : "<p>• No basic validation issues detected.</p>";
+
+  $("resultStatus").textContent =
+    risk.score >= 25
+    ? "This record requires administrator review."
+    : "Basic checks passed. Awaiting administrator approval.";
+
+  refreshDashboard();
+  notify("Student record added to demo workspace.");
+  $("studentForm").reset();
+});
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  })[c]);
+}
+
+function refreshDashboard() {
+  $("totalCount").textContent = students.length;
+  $("flagCount").textContent = students.filter(s => s.status === "Flagged").length;
+  $("verifiedCount").textContent = students.filter(s => s.status === "Verified").length;
+  $("approvedCount").textContent = students.filter(s => s.status === "Approved").length;
+
+  const recent = students.slice(0,5);
+
+  $("recentTable").innerHTML = recent.length ? recent.map(s => `
+    <tr>
+      <td><b>${escapeHTML(s.name)}</b></td>
+      <td>${escapeHTML(s.apaar)}</td>
+      <td>${escapeHTML(s.institution)}</td>
+      <td><b class="${riskClass(s.risk)}">${s.risk}/100</b></td>
+      <td>${statusBadge(s.status)}</td>
+    </tr>
+  `).join("") : `<tr><td colspan="5" class="empty">No student records yet.</td></tr>`;
+}
+
+function setFilter(filter,button) {
+  currentFilter = filter;
+  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+  button.classList.add("active");
+  renderStudents();
+}
+
+function renderStudents() {
+  const search = $("studentSearch").value.toLowerCase();
+
+  const filtered = students.filter(s => {
+    const matchesSearch =
+      [s.name,s.apaar,s.phone,s.email,s.institution]
+      .some(v => String(v).toLowerCase().includes(search));
+
+    const matchesFilter =
+      currentFilter === "all" ||
+      (currentFilter === "flagged" && s.status === "Flagged") ||
+      (currentFilter === "verified" && s.status === "Verified") ||
+      s.status.toLowerCase() === currentFilter;
+
+    return matchesSearch && matchesFilter;
+  });
+
+  $("studentsTable").innerHTML = filtered.length ? filtered.map(s => `
+    <tr>
+      <td class="student-name">${escapeHTML(s.name)}</td>
+      <td>${escapeHTML(s.phone)}</td>
+      <td>${escapeHTML(s.apaar)}</td>
+      <td>${escapeHTML(s.email)}</td>
+      <td>${escapeHTML(s.institution)}</td>
+      <td><b class="${riskClass(s.risk)}">${s.risk}/100</b></td>
+      <td>${statusBadge(s.status)}</td>
+      <td>${escapeHTML(s.reasons.join(", ") || "No issues detected")}</td>
+      <td>
+        ${s.status !== "Approved" && s.status !== "Rejected" ? `
+          <button class="btn btn-success" onclick="updateStatus(${s.id},'Approved')">Approve</button>
+          <button class="btn btn-danger" onclick="updateStatus(${s.id},'Rejected')">Reject</button>
+        ` : "—"}
+      </td>
+    </tr>
+  `).join("") : `<tr><td colspan="9" class="empty">No matching student records found.</td></tr>`;
+}
+
+function updateStatus(id,status) {
+  const student = students.find(s => s.id === id);
+  if(!student) return;
+
+  const message = status === "Approved"
+    ? "Approve this record after reviewing the details?"
+    : "Reject this record after reviewing the details?";
+
+  if(!confirm(message)) return;
+
+  student.status = status;
+  saveStudents();
+  renderStudents();
+  renderFlagged();
+  refreshDashboard();
+  notify("Record marked as " + status + ".");
+}
+
+function renderFlagged() {
+  const flagged = students.filter(s => s.status === "Flagged");
+
+  $("flaggedTable").innerHTML = flagged.length ? flagged.map(s => `
+    <tr>
+      <td><b>${escapeHTML(s.name)}</b></td>
+      <td>${escapeHTML(s.apaar)}</td>
+      <td><b class="${riskClass(s.risk)}">${s.risk}/100</b></td>
+      <td>${escapeHTML(s.reasons.join(", "))}</td>
+      <td>
+        <button class="btn btn-success" onclick="updateStatus(${s.id},'Approved')">Approve</button>
+        <button class="btn btn-danger" onclick="updateStatus(${s.id},'Rejected')">Reject</button>
+      </td>
+    </tr>
+  `).join("") : `<tr><td colspan="5" class="empty">No flagged records.</td></tr>`;
+}
+
+function renderGraph() {
+  let links = [];
+
+  for(let i=0;i<students.length;i++) {
+    for(let j=i+1;j<students.length;j++) {
+      const a = students[i], b = students[j];
+      const shared = [];
+
+      if(a.apaar.toLowerCase() === b.apaar.toLowerCase()) shared.push("APAAR ID");
+      if(a.phone && a.phone === b.phone) shared.push("Phone");
+      if(a.email.toLowerCase() === b.email.toLowerCase()) shared.push("Email");
+
+      if(shared.length) links.push({a,b,shared});
+    }
+  }
+
+  $("graphArea").innerHTML = links.length
+    ? links.map(link => `
+      <div style="margin-bottom:16px;padding:15px;background:white;border:1px solid #eee;border-radius:10px">
+        <span class="graph-node">${escapeHTML(link.a.name)}</span>
+        <i class="fa-solid fa-link" style="color:#8979df"></i>
+        <span class="graph-node flag">${escapeHTML(link.b.name)}</span>
+        <p style="font-size:11px;color:#b16a25;margin-top:10px">
+          Shared identifier: ${escapeHTML(link.shared.join(", "))}
+        </p>
+      </div>
+    `).join("")
+    : `<div class="empty">
+        <i class="fa-solid fa-diagram-project" style="font-size:30px;margin-bottom:13px"></i>
+        <p>No shared identifiers detected in the current demo records.</p>
+      </div>`;
+}
+
+</script>
+</body>
+</html>
